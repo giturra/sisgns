@@ -86,8 +86,8 @@ class IncrementalSG(Transformer, VectorizerMixin):
                     neg_samples[k] = int(self.unigram_table.sample(self.randomizer))
                 
                 input_nn, labels = create_input(target_index, context_index, neg_samples)
-                input_nn.to(self.device).to(torch.int64)
-                labels.to(self.device).to(torch.int64)
+                input_nn.to(self.device)
+                labels.to(self.device)
 
                 print(self.model.parameters())
 
@@ -120,4 +120,4 @@ def create_input(target_index, context_index, neg_samples):
     for neg_sample in neg_samples:
         input.append([target_index, neg_sample])
         labels.append(0)
-    return torch.tensor([input]), torch.tensor([labels]).int()
+    return torch.LongTensor([input]), torch.LongTensor([labels])
