@@ -120,4 +120,4 @@ def create_input(target_index, context_index, neg_samples):
     for neg_sample in neg_samples:
         input.append([target_index, neg_sample])
         labels.append(0)
-    return torch.tensor(input), torch.tensor([labels])
+    return torch.tensor([input]), torch.tensor([labels])
