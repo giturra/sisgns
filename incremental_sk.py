@@ -85,7 +85,7 @@ class IncrementalSG(Transformer, VectorizerMixin):
                 for k in range(0, self.neg_sample_num):
                     neg_samples[k] = int(self.unigram_table.sample(self.randomizer))
                 
-                input_nn, labels = create_input(target_index, context_index, neg_samples).to(self.device)
+                input_nn, labels = create_input(target_index, context_index, neg_samples)
                 input_nn.to(self.device)
                 labels.to(self.device)
 
