@@ -115,9 +115,9 @@ class IncrementalSG(Transformer, VectorizerMixin):
 
 
 def create_input(target_index, context_index, neg_samples):
-    input = [[target_index, context_index]]
+    input = [[int(target_index), int(context_index)]]
     labels = [1]
     for neg_sample in neg_samples:
-        input.append([target_index, neg_sample])
+        input.append([target_index, int(neg_sample)])
         labels.append(0)
     return torch.LongTensor([input]), torch.LongTensor([labels])
