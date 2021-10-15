@@ -29,7 +29,7 @@ class IncrementalSG(Transformer, VectorizerMixin):
         
         self.vec_size = int(vec_size)
 
-        self.max_vocab_size = max_vocab_size
+        self.max_vocab_size = int(2 * max_vocab_size)
         self.vocab = Vocabulary(int(self.max_vocab_size * 2))
 
         self.unigram_table_size = unigram_table_size
