@@ -6,9 +6,9 @@ from river.base.transformer import Transformer
 from river.feature_extraction.vectorize import VectorizerMixin
 
 from .vocab import Vocabulary
-from unigram_table import UnigramTable
-from rand import RandomNum
-from skipgram import SkipGram
+from .unigram_table import UnigramTable
+from .rand import RandomNum
+from .skipgram import SkipGram
 
 
 class IncrementalSG(Transformer, VectorizerMixin):
