@@ -64,28 +64,22 @@ class IncrementalSG(Transformer, VectorizerMixin):
             if target_index == -1:
                 continue
             random_window_size = self.randomizer.uniform(1, self.window_size + 1)
-            #print(random_window_size)
             for offset in range(int(-random_window_size), int(random_window_size)):
-                #print("hola")
                 if offset == 0 or (target + offset) < 0:
-                    #print("1")
                     continue
                 if (target + offset) == n:
-                    #print("2")
                     break
                 context_index = self.vocab[tokens[target + offset]]
                 if context_index == -1:
-                    #print("3")
                     continue
                 if 0 < self.counts[context_index] and np.sqrt(
                     (self.subsampling_threshold * self.total_count) / self.counts[context_index]
                 ) < self.randomizer.uniform(0, 1):
-                    #print("4")
                     continue
                 for k in range(0, self.neg_sample_num):
                     neg_samples[k] = int(self.unigram_table.sample(self.randomizer))
                 
-                print(self.model.embedding_u.weight[target_index])
+                #print(self.model.embedding_u.weight[target_index])
 
                 input_nn, labels = create_input(target_index, context_index, neg_samples)
                 input_nn.to(self.device)
@@ -100,14 +94,17 @@ class IncrementalSG(Transformer, VectorizerMixin):
 
                 self.optimizer.step()
                 
-                print(self.model.embedding_u.weight[target_index])
-
-                
-
+                # print(self.model.embedding_u.weight[target_index])
         return self
 
     def transform_one(self, x: dict) -> dict:
         return super().transform_one(x)
+    
+    def get_emebdding(self, idx):
+        u_embedding = self.model.embedding_u.weight[idx]
+        v_embedding = self.model.embedding_v.weight[idx]
+        output = ((u_embedding + v_embedding) / 2).to(self.device)
+        return output
 
     def update_unigram_table(self, word: str):
         word_index = self.vocab.add(word)
