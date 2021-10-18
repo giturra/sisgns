@@ -5,10 +5,10 @@ from nltk.probability import RandomProbDist
 from river.base.transformer import Transformer
 from river.feature_extraction.vectorize import VectorizerMixin
 
-from .vocab import Vocabulary
-from .unigram_table import UnigramTable
-from .rand import RandomNum
-from .skipgram import SkipGram
+from vocab import Vocabulary
+from unigram_table import UnigramTable
+from rand import RandomNum
+from skipgram import SkipGram
 
 
 class IncrementalSG(Transformer, VectorizerMixin):
@@ -85,20 +85,24 @@ class IncrementalSG(Transformer, VectorizerMixin):
                 for k in range(0, self.neg_sample_num):
                     neg_samples[k] = int(self.unigram_table.sample(self.randomizer))
                 
+                print(self.model.embedding_u.weight[target_index])
+
                 input_nn, labels = create_input(target_index, context_index, neg_samples)
                 input_nn.to(self.device)
                 labels.to(self.device)
 
-                print(self.model.parameters())
-
                 pred = self.model(input_nn)
+                
                 self.model.zero_grad()
 
-                self.criterion(pred, labels)
+                loss = self.criterion(pred, labels.float())
+                loss.backward()
 
                 self.optimizer.step()
+                
+                print(self.model.embedding_u.weight[target_index])
 
-                print(self.model.parameters())
+                
 
         return self
 
