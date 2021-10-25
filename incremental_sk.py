@@ -86,7 +86,7 @@ class IncrementalSG(Transformer, VectorizerMixin):
                 input_nn.to(self.device)
                 labels.to(self.device)
 
-                pred = self.model(input_nn)
+                pred = self.model(input_nn).to(self.device)
                 
                 self.model.zero_grad()
 
