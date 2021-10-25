@@ -5,10 +5,10 @@ class SkipGram(torch.nn.Module):
         super(SkipGram, self).__init__()
         
         # embeddings
-        self.embedding_u = torch.nn.Embedding(vocab_size, embedding_dim)
-        self.embedding_v = torch.nn.Embedding(vocab_size, embedding_dim)
+        self.embedding_u = torch.nn.Embedding(vocab_size, embedding_dim).to('cuda')
+        self.embedding_v = torch.nn.Embedding(vocab_size, embedding_dim).to('cuda')
 
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        #self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         
     def forward(self, x):
         #print(x)
