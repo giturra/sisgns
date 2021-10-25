@@ -46,13 +46,14 @@ class IncrementalSG(Transformer, VectorizerMixin):
         
         self.randomizer = RandomNum(1234)
 
+        # net in pytorch
         self.model = SkipGram(self.max_vocab_size, self.vec_size)
         self.optimizer = torch.optim.SGD(self.model.parameters(), lr=0.5, momentum=0.9)
         self.criterion = torch.nn.BCEWithLogitsLoss()
 
 
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
+        #self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device('cuda')
 
     def learn_one(self, x: dict, **kwargs):
         tokens = self.process_text(x)
@@ -91,10 +92,10 @@ class IncrementalSG(Transformer, VectorizerMixin):
 
                 loss = self.criterion(pred, labels.float())
                 loss.backward()
-
-                self.optimizer.step()
                 
-                # print(self.model.embedding_u.weight[target_index])
+                print(loss)
+                self.optimizer.step()                
+            print(f"{'is'} {self.get_emebdding(self.vocab['is'])}")
         return self
 
     def transform_one(self, x: dict) -> dict:
