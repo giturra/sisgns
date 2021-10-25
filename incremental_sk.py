@@ -93,9 +93,9 @@ class IncrementalSG(Transformer, VectorizerMixin):
                 loss = self.criterion(pred, labels.float())
                 loss.backward()
                 
-                print(loss)
+                #print(loss)
                 self.optimizer.step()                
-            print(f"{'is'} {self.get_emebdding(self.vocab['is'])}")
+            #print(f"{'is'} {self.get_emebdding(self.vocab['is'])}")
         return self
 
     def transform_one(self, x: dict) -> dict:
