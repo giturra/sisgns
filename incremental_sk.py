@@ -48,6 +48,7 @@ class IncrementalSG(Transformer, VectorizerMixin):
 
         # net in pytorch
         self.model = SkipGram(self.max_vocab_size, self.vec_size)
+        self.model.to('cuda')
         self.optimizer = torch.optim.SGD(self.model.parameters(), lr=0.5, momentum=0.9)
         self.criterion = torch.nn.BCEWithLogitsLoss()
 
@@ -83,14 +84,16 @@ class IncrementalSG(Transformer, VectorizerMixin):
                 #print(self.model.embedding_u.weight[target_index])
 
                 input_nn, labels = create_input(target_index, context_index, neg_samples)
-                input_nn.to(self.device)
-                labels.to(self.device)
+                input_nn.to('cuda')
+                labels = labels.float()
+                labels.to('cuda')
 
-                pred = self.model(input_nn).to(self.device)
+                pred = self.model(input_nn)
+                pred.to('cuda')
                 
                 self.model.zero_grad()
 
-                loss = self.criterion(pred, labels.float())
+                loss = self.criterion(pred, labels)
                 loss.backward()
                 
                 #print(loss)
